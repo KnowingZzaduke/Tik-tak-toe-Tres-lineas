@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { win, empate } from "./logic/board";
 import { TURNS } from "./constants.js";
 import { Square } from "./components/Square";
 import { Modal } from "./components/Modal";
 import confetti from 'canvas-confetti';
+import { saveStorage, resetStorage } from "./logic/storage/storage";
 import "./App.css";
 
 function App() {
@@ -11,10 +12,21 @@ function App() {
   const [turn, setTurn] = useState(TURNS.x);
   const [winner, setWinner] = useState(null);
 
+  useEffect(() => {
+    const boardFromStorage = window.localStorage.getItem('board');
+    const turnFromStorage = window.localStorage.getItem('turn');
+    const parsedBoard = JSON.parse(boardFromStorage);
+    if(parsedBoard && turnFromStorage){
+      setBoard(parsedBoard);
+      setTurn(turn)
+    } 
+  }, [])
+
   function reset() {
     setBoard(Array(9).fill(null));
     setTurn(TURNS.x);
     setWinner(null);
+    resetStorage();
   }
 
   function updateBoard(index) {
@@ -30,13 +42,17 @@ function App() {
     setTurn(newTurn);
     // revisar si hay ganador
     const newWinner = win(newBoard);
+    saveStorage({
+      board: newBoard,
+      turn: newTurn
+    })
     if (newWinner) {
       confetti();
       setWinner(newWinner);
       empate(newBoard);
     }
   }
-
+  
   return (
     <main className="board">
       <h1>Tik Tac Toe</h1>
