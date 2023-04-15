@@ -18,7 +18,7 @@ function App() {
     const parsedBoard = JSON.parse(boardFromStorage);
     if(parsedBoard && turnFromStorage){
       setBoard(parsedBoard);
-      setTurn(turn)
+      setTurn(turnFromStorage);
     } 
   }, [])
 
