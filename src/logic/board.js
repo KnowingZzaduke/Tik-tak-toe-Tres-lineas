@@ -15,6 +15,6 @@ export function win(newBoard) {
 }
 
 export function empate(newBoard) {
-  return newBoard.every((square) => square !== false);
+  return newBoard.every((square) => square !== null);
 }
 

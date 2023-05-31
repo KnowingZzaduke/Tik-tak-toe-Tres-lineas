@@ -31,11 +31,11 @@ function App() {
 
   function updateBoard(index) {
     // no actualizamos esta posición
-    // si ya tiene algo
+    // si ya tiene algo o si alguién ganó
     if (board[index] || winner) return;
     // actualizar el tablero
     const newBoard = [...board];
-    newBoard[index] = turn;
+    newBoard[index] = turn ;
     setBoard(newBoard);
     // cambiar el turno
     const newTurn = turn === TURNS.x ? TURNS.o : TURNS.x;
@@ -49,9 +49,11 @@ function App() {
     if (newWinner) {
       confetti();
       setWinner(newWinner);
-      empate(newBoard);
+      
+    }else if(empate(newBoard)){
+      setWinner(false);
     }
-  }
+  } 
   
   return (
     <main className="board">
